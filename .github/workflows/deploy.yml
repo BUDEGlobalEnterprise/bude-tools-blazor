@@ -6,36 +6,33 @@ on:
       - main
 
 permissions:
-  contents: write # Required to push to gh-pages branch
+  contents: write
 
 jobs:
   deploy-to-github-pages:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup .NET 8 SDK (LTS - Stable)
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
-      # 3. Verify .NET version (debugging)
-      - name: Verify .NET version
-        run: dotnet --info
-
-      # 4. Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # 5. Publish Blazor WebAssembly app
       - name: Publish Blazor app
         run: dotnet publish -c Release -o release --nologo
 
-      # 6. Deploy to GitHub Pages
+      # Add .nojekyll and 404.html
+      - name: Add GitHub Pages SPA support files
+        run: |
+          touch release/wwwroot/.nojekyll
+          cp wwwroot/404.html release/wwwroot/404.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
