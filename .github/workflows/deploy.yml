@@ -13,15 +13,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0' # Or whatever .NET version you are using
+          dotnet-version: '9.0.x'
+          include-prerelease: true
+
+      - name: Verify .NET version
+        run: dotnet --info
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Publish Blazor app
         run: dotnet publish -c Release -o release --nologo
 
-      - name: Commit wwwroot to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
