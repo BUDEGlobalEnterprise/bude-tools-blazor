@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Bude-Tools-Blazor",
   "resources": {
-    "hash": "sha256-Os8eWQ8ZWJ7RCF1bKhU/R3f88QB1d7taas725+muBT4=",
+    "hash": "sha256-ETlwwvZltNms0zH6EHDrKpoopLKG5wXsvkKeBNlSnsw=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Components.3z8oblhzhw.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.2yj94ckvak.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
@@ -36,7 +36,7 @@
       "System.Text.Json.dek5fmtx16.wasm": "System.Text.Json.wasm",
       "System.Text.RegularExpressions.uppli1il33.wasm": "System.Text.RegularExpressions.wasm",
       "System.Private.CoreLib.zqwm89bpsc.wasm": "System.Private.CoreLib.wasm",
-      "Bude-Tools-Blazor.cg2c3x0b6z.wasm": "Bude-Tools-Blazor.wasm",
+      "Bude-Tools-Blazor.d6ubxd4ikb.wasm": "Bude-Tools-Blazor.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.st0ovrfdhi.js": "dotnet.native.js",
       "dotnet.native.67rumul467.wasm": "dotnet.native.wasm",
@@ -95,7 +95,7 @@
       "System.Text.Encodings.Web.17hm3y46w3.wasm": "sha256-c5RLUrDt4sG/1BUZLDKBL/8r3macGjhggRplXaBWcBQ=",
       "System.Text.Json.dek5fmtx16.wasm": "sha256-hY1yctGtllw8dkFHUqvBIfat9dvziGRQy/JmPYtTpf0=",
       "System.Text.RegularExpressions.uppli1il33.wasm": "sha256-cssgrj2fLKJui+a09EbhoMvUEqUJHPWKR47Ri3l887A=",
-      "Bude-Tools-Blazor.cg2c3x0b6z.wasm": "sha256-bF6Dm6JpdZEnnK41D2jOQQM0BoVRXUqLyCXHdTAEhHs="
+      "Bude-Tools-Blazor.d6ubxd4ikb.wasm": "sha256-hUKN1YzamxR5/F38ChsRFUlP448xlkKOK6BaLYzKHE0="
     }
   },
   "cacheBootResources": true,
