@@ -18,7 +18,7 @@
 
 ## 🌐 Live Demo
 
-[https://yourusername.github.io/bude-tools-blazor](https://yourusername.github.io/bude-tools-blazor)
+[https://budeglobalenterprise.github.io/bude-tools-blazor](https://budeglobalenterprise.github.io/bude-tools-blazor)
 
 -----
 
