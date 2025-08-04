@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Bude-Tools-Blazor",
   "resources": {
-    "hash": "sha256-V7f5EDgDut+trlJv2CZiy0wYMdQDcA05LWDX0thzV+U=",
+    "hash": "sha256-hEXpl2HdNYq9kaUpPvKS7jSY890tcM8VG9qBDV/Kddw=",
     "jsModuleNative": {
       "dotnet.native.8.0.18.td341apd3g.js": "sha256-1QpKPnxEuRCElzcp+e3MrovJeAJkuzqKmRQay/6Aa08="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "Bude-Tools-Blazor.wasm": "sha256-il9qjXlKdxBIxSbcQEz1P+uhrWHfN0Oc365xwHJ7ghs=",
+      "Bude-Tools-Blazor.wasm": "sha256-muL2hy184bRc1pr4rJOq4xx2jDye9n7mWpTdZ3u9mj0=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-afyz33zoCLLxq241evZ767nYL5c/TrB5RNSkNBD2D+s=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-DUvpzktySFpUWNVEp87C8FbAJYUD6qHu7a6hL+tBSl4=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-kZSJV9ON9UL924dyAnAeoFHZXExv5A/OCxTHlMc+3fQ=",
