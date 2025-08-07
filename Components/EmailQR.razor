@@ -1,0 +1,35 @@
+﻿<MudCard>
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Email QR Code</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="EmailAddress"
+                      Label="Email Address"
+                      Variant="Variant.Outlined"
+                      Required="true"
+                      RequiredError="Email is required"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="Subject"
+                      Label="Subject (Optional)"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="Message"
+                      Label="Message (Optional)"
+                      Variant="Variant.Outlined"
+                      Lines="3"
+                      Multiline="true" />
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string? EmailAddress { get; set; }
+
+    [Parameter]
+    public string? Subject { get; set; }
+
+    [Parameter]
+    public string? Message { get; set; }
+}

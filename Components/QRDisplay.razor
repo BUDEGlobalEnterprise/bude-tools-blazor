@@ -1,0 +1,37 @@
+﻿<MudPaper Elevation="10" Class="text-center pa-4">
+    @if (!string.IsNullOrEmpty(ImageData))
+    {
+        <img src="@ImageData" style="max-width: 100%; height: auto;" alt="Generated QR Code" />
+
+        <div class="d-flex justify-center gap-3 mt-3">
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Secondary"
+                       StartIcon="@Icons.Material.Filled.Download"
+                       OnClick="DownloadQR">
+                Download
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Info"
+                       StartIcon="@Icons.Material.Filled.Share"
+                       Disabled="true">
+                Share
+            </MudButton>
+        </div>
+    }
+</MudPaper>
+
+@code {
+    [Parameter] public string? ImageData { get; set; }
+    [Parameter] public int Size { get; set; } = 300;
+
+    [Parameter] public EventCallback OnDownload { get; set; }
+
+    private async Task DownloadQR()
+    {
+        if (OnDownload.HasDelegate)
+        {
+            await OnDownload.InvokeAsync(null);
+        }
+    }
+}

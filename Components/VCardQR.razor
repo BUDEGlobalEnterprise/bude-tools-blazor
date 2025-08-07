@@ -1,0 +1,117 @@
+﻿@* The VCardQR component with extended fields for a complete vCard *@
+@namespace Bude_Tools_Blazor.Components
+@using MudBlazor
+@using static QRCoder.PayloadGenerator
+
+<MudCard Outlined="true" Class="pa-4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">vCard QR Code</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudForm @ref="form">
+            <MudText Typo="Typo.h6" Class="mt-4 mb-2">Personal Information</MudText>
+            <div class="d-flex gap-4">
+                <MudTextField @bind-Value="FirstName"
+                              Label="First Name"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1"
+                              Required="true"
+                              RequiredError="First Name is required!" />
+
+                <MudTextField @bind-Value="LastName"
+                              Label="Last Name"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1"
+                              Required="true"
+                              RequiredError="Last Name is required!" />
+            </div>
+            <MudTextField @bind-Value="Nickname"
+                          Label="Nickname"
+                          Variant="Variant.Outlined"
+                          Class="mt-3" />
+            <MudDatePicker Label="Birthday"
+                           @bind-Date="Birthday"
+                           Variant="Variant.Outlined"
+                           Class="mt-3" />
+
+            <MudText Typo="Typo.h6" Class="mt-6 mb-2">Contact Information</MudText>
+            <MudTextField @bind-Value="Phone"
+                          Label="Phone"
+                          Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="Mobile"
+                          Label="Mobile Phone"
+                          Variant="Variant.Outlined"
+                          Class="mt-3" />
+            <MudTextField @bind-Value="Email"
+                          Label="Email"
+                          Variant="Variant.Outlined"
+                          Class="mt-3" />
+            <MudTextField @bind-Value="Website"
+                          Label="Website"
+                          Variant="Variant.Outlined"
+                          Class="mt-3" />
+
+            <MudText Typo="Typo.h6" Class="mt-6 mb-2">Address</MudText>
+            <MudTextField @bind-Value="Street"
+                          Label="Street"
+                          Variant="Variant.Outlined" />
+            <div class="d-flex gap-4 mt-3">
+                <MudTextField @bind-Value="City"
+                              Label="City"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1" />
+                <MudTextField @bind-Value="ZipCode"
+                              Label="ZIP"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1" />
+            </div>
+            <div class="d-flex gap-4 mt-3">
+                <MudTextField @bind-Value="State"
+                              Label="State"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1" />
+                <MudTextField @bind-Value="Country"
+                              Label="Country"
+                              Variant="Variant.Outlined"
+                              Class="flex-grow-1" />
+            </div>
+
+            <MudText Typo="Typo.h6" Class="mt-6 mb-2">Company Information</MudText>
+            <MudTextField @bind-Value="Organization"
+                          Label="Organization"
+                          Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="JobTitle"
+                          Label="Job Title"
+                          Variant="Variant.Outlined"
+                          Class="mt-3" />
+
+            <MudTextField @bind-Value="Note"
+                          Label="Note"
+                          Variant="Variant.Outlined"
+                          Lines="3"
+                          Class="mt-6" />
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter] public string? FirstName { get; set; }
+    [Parameter] public string? LastName { get; set; }
+    [Parameter] public string? Nickname { get; set; }
+    [Parameter] public string? Phone { get; set; }
+    [Parameter] public string? Mobile { get; set; }
+    [Parameter] public string? Email { get; set; }
+    [Parameter] public string? Website { get; set; }
+    [Parameter] public DateTime? Birthday { get; set; }
+    [Parameter] public string? Street { get; set; }
+    [Parameter] public string? City { get; set; }
+    [Parameter] public string? ZipCode { get; set; }
+    [Parameter] public string? State { get; set; }
+    [Parameter] public string? Country { get; set; }
+    [Parameter] public string? Organization { get; set; }
+    [Parameter] public string? JobTitle { get; set; }
+    [Parameter] public string? Note { get; set; }
+
+    public MudForm form = default!;
+    public bool IsValid => form.IsValid;
+}

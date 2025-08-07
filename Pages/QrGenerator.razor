@@ -1,0 +1,271 @@
+﻿@page "/home"
+@using Bude_Tools_Blazor.Components
+@using QRCoder
+@using MudBlazor
+@using static QRCoder.PayloadGenerator
+@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="my-8">
+    <MudPaper Class="pa-6" Elevation="10" Rounded="true">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <MudText Typo="Typo.h4" Color="Color.Primary" Class="font-weight-bold">QR Code Generator</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">
+                Create customized QR codes for links, contacts, email, and more.
+            </MudText>
+        </div>
+
+        <!-- Tabs -->
+        <MudTabs @bind-ActivePanelIndex="activeTabIndex"
+                 Centered="true"
+                 Class="mb-4"
+                 Elevation="1"
+                 Rounded="true"
+                 OnActivePanelIndexChanged="OnTabChanged">
+            <MudTabPanel Text="URL" Icon="@Icons.Material.Filled.Link">
+                <UrlQR @ref="urlQrComponent" />
+            </MudTabPanel>
+            <MudTabPanel Text="Contact" Icon="@Icons.Material.Filled.Contacts">
+                <VCardQR @ref="vCardQrComponent" />
+            </MudTabPanel>
+            <MudTabPanel Text="Email" Icon="@Icons.Material.Filled.Email">
+                <EmailQR @ref="emailQrComponent" />
+            </MudTabPanel>
+            <MudTabPanel Text="SMS" Icon="@Icons.Material.Filled.Sms">
+                <SmsQR @ref="smsQrComponent" />
+            </MudTabPanel>
+            <MudTabPanel Text="WiFi" Icon="@Icons.Material.Filled.Wifi">
+                <WifiQR @ref="wifiQrComponent" />
+            </MudTabPanel>
+        </MudTabs>
+
+        <!-- Controls -->
+        <MudDivider Class="my-6" />
+
+        <div class="d-flex flex-wrap justify-center justify-sm-space-between align-center gap-4">
+            <MudSlider @bind-Value="qrSize"
+                       Label="QR Size"
+                       Min="100"
+                       Max="500"
+                       Step="25"
+                       Immediate="true"
+                       Class="flex-grow-1"
+                       Style="max-width: 300px;" />
+
+            <div class="d-flex gap-2">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="GenerateQR"
+                           Disabled="@(!HasContent || isGenerating)"
+                           EndIcon="@Icons.Material.Filled.QrCode2"
+                           Loading="@isGenerating"
+                           Title="Generate QR code">
+                    @(isGenerating ? "Generating..." : "Generate QR")
+                </MudButton>
+
+                @if (!string.IsNullOrEmpty(qrCodeImage))
+                {
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Secondary"
+                               OnClick="DownloadQR"
+                               StartIcon="@Icons.Material.Filled.Download"
+                               Title="Download QR code as PNG">
+                        Download
+                    </MudButton>
+                }
+            </div>
+        </div>
+
+        <!-- QR Output -->
+        @if (!string.IsNullOrEmpty(qrCodeImage))
+        {
+            <MudPaper Elevation="5" Class="mt-6 pa-4 text-center" Rounded="true">
+                <img src="@qrCodeImage"
+                     alt="Generated QR Code"
+                     style="width: @(qrSize)px; height: @(qrSize)px; max-width: 100%;"
+                     class="ma-auto" />
+
+                <div class="d-flex flex-column flex-sm-row justify-center align-center gap-4 mt-4">
+                    <MudTextField T="string"
+                                  @bind-Value="customFileName"
+                                  Label="File name"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Class="flex-grow-1"
+                                  Style="max-width: 300px;" />
+
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Info"
+                               OnClick="CopyToClipboard"
+                               StartIcon="@Icons.Material.Filled.ContentCopy"
+                               Title="Copy Base64 image data to clipboard">
+                        Copy Image
+                    </MudButton>
+                </div>
+            </MudPaper>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private int activeTabIndex = 0;
+    private int qrSize = 250;
+    private string? qrCodeImage;
+    private string customFileName = "QRCode";
+    private bool isGenerating = false;
+
+    // References to child components
+    private UrlQR? urlQrComponent;
+    private VCardQR? vCardQrComponent;
+    private EmailQR? emailQrComponent;
+    private SmsQR? smsQrComponent;
+    private WifiQR? wifiQrComponent;
+
+    // Check if there is enough content and the form is valid in the active tab
+    private bool HasContent => activeTabIndex switch
+    {
+        0 => !string.IsNullOrWhiteSpace(urlQrComponent?.Url),
+        1 => !string.IsNullOrWhiteSpace(vCardQrComponent?.FirstName) && !string.IsNullOrWhiteSpace(vCardQrComponent?.LastName),
+        2 => !string.IsNullOrWhiteSpace(emailQrComponent?.EmailAddress),
+        3 => !string.IsNullOrWhiteSpace(smsQrComponent?.PhoneNumber),
+        4 => !string.IsNullOrWhiteSpace(wifiQrComponent?.Ssid),
+        _ => false
+    };
+
+    // Resets the QR code image when the tab is changed
+    private void OnTabChanged(int newIndex)
+    {
+        qrCodeImage = null;
+    }
+
+    // Handles the QR code generation process
+    private async Task GenerateQR()
+    {
+        isGenerating = true;
+        qrCodeImage = null;
+
+        try
+        {
+            // Validate the form for the active component before generating
+            if (activeTabIndex == 1)
+            {
+                if (vCardQrComponent == null) return;
+                await vCardQrComponent.form.Validate();
+                if (!vCardQrComponent.form.IsValid)
+                {
+                    isGenerating = false;
+                    Snackbar.Add("Please fill out the required fields for the contact card.", Severity.Warning);
+                    return;
+                }
+            }
+
+            Payload? payload = GetPayloadByTabIndex();
+
+            if (payload == null || string.IsNullOrWhiteSpace(payload.ToString()))
+            {
+                Snackbar.Add("Please enter valid input to generate a QR code.", Severity.Warning);
+                return;
+            }
+
+            // Perform the CPU-intensive generation in a background thread
+            await Task.Run(() =>
+            {
+                var qrGenerator = new QRCodeGenerator();
+                var qrData = qrGenerator.CreateQrCode(payload.ToString(), QRCodeGenerator.ECCLevel.Q);
+                var qrCode = new PngByteQRCode(qrData);
+                var bytes = qrCode.GetGraphic(20);
+                qrCodeImage = $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
+            });
+
+            Snackbar.Add("QR code generated successfully!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"QR generation failed: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            isGenerating = false;
+        }
+    }
+
+    // A helper method to get the correct payload based on the active tab
+    private Payload? GetPayloadByTabIndex() => activeTabIndex switch
+    {
+        0 => string.IsNullOrWhiteSpace(urlQrComponent?.Url) ? null : new Url(urlQrComponent.Url),
+        1 => new ContactData(
+            ContactData.ContactOutputType.VCard3,
+            vCardQrComponent?.FirstName ?? string.Empty,
+            vCardQrComponent?.LastName ?? string.Empty,
+            vCardQrComponent?.Phone,
+            mobilePhone: vCardQrComponent?.Mobile,
+            email: vCardQrComponent?.Email,
+            website: vCardQrComponent?.Website,
+            birthday: vCardQrComponent?.Birthday,
+            street: vCardQrComponent?.Street,
+            city: vCardQrComponent?.City,
+            zipCode: vCardQrComponent?.ZipCode,
+            stateRegion: vCardQrComponent?.State,
+            country: vCardQrComponent?.Country,
+            org: vCardQrComponent?.Organization,
+            orgTitle: vCardQrComponent?.JobTitle,
+            note: vCardQrComponent?.Note
+        ),
+        2 => new Mail(
+            emailQrComponent?.EmailAddress ?? string.Empty,
+            emailQrComponent?.Subject ?? string.Empty,
+            emailQrComponent?.Message ?? string.Empty),
+        3 => new SMS(
+            smsQrComponent?.PhoneNumber ?? string.Empty,
+            smsQrComponent?.Message ?? string.Empty),
+        4 => new WiFi(
+            wifiQrComponent?.Ssid ?? string.Empty,
+            wifiQrComponent?.Password,
+            WiFi.Authentication.WPA,
+            wifiQrComponent?.IsHidden == true),
+        _ => null
+    };
+
+    // Download the generated QR code using JavaScript Interop
+    private async Task DownloadQR()
+    {
+        if (string.IsNullOrEmpty(qrCodeImage))
+        {
+            Snackbar.Add("No QR code to download.", Severity.Warning);
+            return;
+        }
+
+        try
+        {
+            var fileName = string.IsNullOrWhiteSpace(customFileName) ? "QRCode" : customFileName;
+            // Split the Base64 string to get the data part
+            var base64Data = qrCodeImage.Split(',')[1];
+            await JSRuntime.InvokeVoidAsync("downloadFile", $"{fileName}.png", "image/png", base64Data);
+            Snackbar.Add("Download started!", Severity.Info);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Download failed: {ex.Message}", Severity.Error);
+        }
+    }
+
+    // Copy the Base64 image data to the clipboard using JavaScript Interop
+    private async Task CopyToClipboard()
+    {
+        if (string.IsNullOrEmpty(qrCodeImage))
+        {
+            Snackbar.Add("No QR code to copy.", Severity.Warning);
+            return;
+        }
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", qrCodeImage);
+            Snackbar.Add("QR code image data copied to clipboard!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Copy failed: {ex.Message}", Severity.Error);
+        }
+    }
+}

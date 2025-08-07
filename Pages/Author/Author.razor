@@ -1,0 +1,102 @@
+﻿@page "/about"
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="my-8">
+    <MudPaper Class="pa-6" Elevation="5" Rounded="true">
+        <!-- Project Header -->
+        <div class="text-center mb-6">
+            <MudAvatar Size="MudBlazor.Size.Large" Class="ma-auto mb-4" Style="background-color: #3d5afe;">
+                <MudIcon Icon="@Icons.Material.Filled.Construction" Size="Size.Large" Color="Color.Inherit" />
+            </MudAvatar>
+            <MudText Typo="Typo.h4" Class="mb-2" Color="Color.Primary">Bude Tools Blazor</MudText>
+            <MudText Typo="Typo.subtitle1" Color="Color.Secondary">Open Source Developer Tools</MudText>
+        </div>
+
+        <!-- Project Description -->
+        <MudText Class="mb-4">
+            A collection of free, privacy-focused web tools built with Blazor WebAssembly. All tools run completely client-side -
+            no data is ever sent to external servers. The project demonstrates modern .NET capabilities for building full-featured
+            web applications without JavaScript frameworks.
+        </MudText>
+
+        <MudDivider Class="my-4" />
+        <!-- Header Section -->
+        <div class="text-center mb-6">
+            <MudAvatar Size="Size.Large" Class="mx-auto mb-4" Img="your-profile-photo.jpg" />
+            <MudText Typo="Typo.h4">Aravind Govindhasamy</MudText>
+            <MudText Typo="Typo.subtitle1" Color="Color.Secondary">Backend Developer | Python & C# Expert</MudText>
+        </div>
+
+        <!-- About Me -->
+        <MudText Class="mb-4">
+            Passionate backend developer with hands-on experience in .NET, Python, Node.js, and IoT-based systems. I specialize in building efficient and scalable solutions for automation and enterprise systems.
+        </MudText>
+
+        <MudDivider />
+
+        <!-- Education & Experience -->
+        <MudExpansionPanels Class="my-4">
+            <MudExpansionPanel Text="Education">
+                <MudText Class="mb-2"><b>MCA</b> – Sri Ramakrishna Mission Vidyalaya (2022–2024)</MudText>
+                <MudText><b>BSc Computer Science</b> – SRMV College (2019–2022)</MudText>
+            </MudExpansionPanel>
+
+            <MudExpansionPanel Text="Experience">
+                <MudText Class="mb-2"><b>Junior .NET Developer</b> – 2CQR Automation (May 2024 – Oct 2024)</MudText>
+                <MudText>Developed ERP and CRM features, including RFID integration and UI enhancements.</MudText>
+                <MudText Class="mt-2"><b>.NET Intern</b> – 2CQR (Jan 2024 – May 2024)</MudText>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+
+        <MudDivider />
+
+        <!-- Skills -->
+        <MudText Typo="Typo.h6" Class="mt-4">Skills</MudText>
+        <MudChipSet T="string" Class="my-2">
+            <MudChip T="string" Color="Color.Primary">C#</MudChip>
+            <MudChip T="string" Color="Color.Primary">Python</MudChip>
+            <MudChip T="string" Color="Color.Primary">Node.js</MudChip>
+            <MudChip T="string" Color="Color.Primary">SQL</MudChip>
+            <MudChip T="string" Color="Color.Primary">.NET</MudChip>
+            <MudChip T="string" Color="Color.Primary">IoT / RFID</MudChip>
+        </MudChipSet>
+
+        <MudDivider />
+
+        <!-- Services -->
+        <MudText Typo="Typo.h6" Class="mt-4">Services</MudText>
+        <MudList T="string" Dense="true">
+            <MudListItem T="string">ERPNext Implementation</MudListItem>
+            <MudListItem T="string">RFID Integration</MudListItem>
+            <MudListItem T="string">Backend Development (.NET, Python)</MudListItem>
+            <MudListItem T="string">Automation Scripting</MudListItem>
+        </MudList>
+
+        <MudDivider />
+
+        <!-- Contact Icons -->
+        <div class="mt-4 text-center">
+            <!-- LinkedIn Icon -->
+            <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
+                           Color="Color.Primary"
+                           Href="https://linkedin.com/in/aravind-govindhasamy-064486280"
+                           Target="_blank" />
+
+            <!-- GitHub Icon -->
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                           Color="Color.Dark"
+                           Href="https://github.com/aravind-govindhasamy"
+                           Target="_blank" />
+
+            <!-- Email Icon -->
+            <MudIconButton Icon="@Icons.Material.Filled.Email"
+                           Color="Color.Secondary"
+                           Href="mailto:aravindapg06@gmail.com" />
+        </div>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    // No C# code is needed for this static page.
+}

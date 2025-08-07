@@ -1,0 +1,53 @@
+﻿@* The WifiQR component with fields for a Wi-Fi network *@
+@namespace Bude_Tools_Blazor.Components
+@using MudBlazor
+@using static QRCoder.PayloadGenerator
+@using System.ComponentModel.DataAnnotations
+
+<MudCard Outlined="true" Class="pa-4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Wi-Fi QR Code</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudForm>
+            <MudTextField @bind-Value="Ssid"
+                          Label="SSID (Network Name)"
+                          Variant="Variant.Outlined"
+                          Required="true"
+                          RequiredError="SSID is required!" />
+
+            <MudSelect @bind-Value="Authentication"
+                       Label="Authentication"
+                       Variant="Variant.Outlined"
+                       Class="mt-3">
+                <MudSelectItem Value="WiFi.Authentication.WPA">WPA / WPA2</MudSelectItem>
+                <MudSelectItem Value="WiFi.Authentication.WEP">WEP</MudSelectItem>
+                <MudSelectItem Value="WiFi.Authentication.nopass">None</MudSelectItem>
+            </MudSelect>
+
+            <MudTextField @bind-Value="Password"
+                          Label="Password"
+                          Variant="Variant.Outlined"
+                          InputType="InputType.Password"
+                          Class="mt-3"
+                          Disabled="@(Authentication == WiFi.Authentication.nopass)" />
+            <MudCheckBox @bind-Value="IsHidden"
+                         Label="Hidden Network"
+                         Class="mb-3" />
+        </MudForm>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter] public string? Ssid { get; set; }
+    [Parameter] public EventCallback<string?> SsidChanged { get; set; }
+
+    [Parameter] public WiFi.Authentication Authentication { get; set; } = WiFi.Authentication.WPA;
+    [Parameter] public EventCallback<WiFi.Authentication> AuthenticationChanged { get; set; }
+
+    [Parameter] public string? Password { get; set; }
+    [Parameter] public EventCallback<string?> PasswordChanged { get; set; }
+
+    [Parameter] public bool IsHidden { get; set; }
+    [Parameter] public EventCallback<bool> IsHiddenChanged { get; set; }
+}
